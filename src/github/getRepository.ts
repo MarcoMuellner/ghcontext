@@ -1,6 +1,6 @@
 import { getGraphQLClientSingleton } from "./utils/client.js";
 import * as cache from "./utils/cache.js";
-import {GraphQLError, GraphQLResponse} from "./utils/errors";
+import {GraphQLError, GraphQLResponse} from "./utils/errors.js";
 
 /**
  * Language edge interface
