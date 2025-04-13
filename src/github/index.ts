@@ -8,7 +8,7 @@
  */
 
 // Export token utilities
-export { getToken, TokenSource, TokenInfo, clearTokenCache } from "./utils/get-token.js";
+export { getToken, TokenSource, TokenInfo, clearTokenCache } from "./utils/getToken";
 
 // Export cache utilities
 export * as cache from "./utils/cache.js";

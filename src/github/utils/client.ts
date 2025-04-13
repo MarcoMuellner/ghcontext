@@ -1,6 +1,6 @@
 import { graphql } from "@octokit/graphql";
 import { Octokit } from "@octokit/rest";
-import { getToken } from "./get-token.js";
+import { getToken } from "./getToken";
 
 /**
  * User agent string for GitHub API requests

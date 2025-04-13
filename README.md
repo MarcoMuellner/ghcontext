@@ -1,115 +1,131 @@
-# GitCP: Real-time GitHub API and Design Context for LLMs
+# GitCP: Supercharge Your LLMs with Real-time GitHub Context
 
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-![TypeScript](https://img.shields.io/badge/TypeScript-%23007ACC.svg?style=flat&logo=typescript&logoColor=white)
-![Node.js](https://img.shields.io/badge/Node.js-%23339933.svg?style=flat&logo=nodedotjs&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-green.svg)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue.svg)
+![Node.js](https://img.shields.io/badge/Node.js-22.x-green.svg)
+![MCP](https://img.shields.io/badge/MCP-Compatible-purple.svg)
 
-## Overview
+> *"But my GitHub repo changed yesterday..." - Never worry about outdated information in your AI assistants again.*
 
-**GitCP** is an MCP (Model Context Protocol) server designed to provide Large Language Models (LLMs) with up-to-date and relevant information about a GitHub repository's **API, design principles, and architecture**. By serving as a bridge between GitHub and LLMs via the standardized MCP, GitCP enables AI models to gain a deeper, real-time understanding of software projects. This empowers LLMs to assist developers more effectively with tasks like code comprehension, API usage, debugging, and learning about new libraries and frameworks.
+GitCP (GitHub Context Provider) bridges the gap between GitHub and Large Language Models, giving AI assistants real-time access to repository information through the standardized Model Context Protocol (MCP).
 
-## Key Features
+<p align="center">
+  <img src="docs/images/gitcp-diagram.png" alt="GitCP Architecture" width="600"/>
+</p>
 
-* **Real-time GitHub Data Access:** Fetches the latest information directly from GitHub.
-* **API Documentation Retrieval:** Attempts to extract and provide API documentation from README files and other documentation sources within a repository.
-* **Design Overview Extraction (Conceptual):** Aims to provide insights into the project's design and architecture based on available information.
-* **MCP Compliant Server:** Adheres to the Model Context Protocol for seamless integration with compatible LLMs.
-* **Extensible Architecture:** Designed to allow for the addition of more tools to access various aspects of GitHub repositories.
-* **Optional Data Caching:** Improves performance and reduces API load by caching frequently accessed information.
+## 🔥 Why GitCP?
 
-## Architecture
+- **Accurate, Real-time Information:** LLMs often have outdated knowledge about repositories. GitCP provides the latest API docs, README contents, and codebase structure.
+- **Deeper Understanding:** Help LLMs grasp your project's architecture, design principles, and API usage patterns.
+- **Seamless Integration:** Compatible with any MCP-enabled models, including Claude, GPT, and others.
+- **Highly Efficient:** Intelligent caching reduces API calls while keeping information fresh.
 
-GitCP follows a modular architecture:
+## ✨ Key Features
 
-1.  **MCP Server (`@modelcontextprotocol/server`):** Handles communication with LLMs via the Model Context Protocol.
-2.  **GitHub API Client (`@octokit/graphql.js`):** Interacts with the GitHub REST API to retrieve data.
-3.  **Contextual Data Processing:** Analyzes and extracts meaningful information about API and design from GitHub data.
-4.  **Data Caching (`node-cache` or similar):** (Optional) Stores frequently accessed data to improve performance.
-5.  **Configuration Management (`dotenv`):** Loads and manages server configurations.
-6.  **Logging:** Provides logging for debugging and monitoring.
+- **API Documentation Extraction:** Automatically identifies and extracts API documentation from READMEs and dedicated documentation files
+- **Repository Structure Analysis:** Provides a map of your codebase's organization
+- **README Content Retrieval:** Gets the latest documentation directly from GitHub
+- **File Content Search:** Find and extract specific files or code snippets
+- **Repository Search:** Discover repositories matching specific criteria
 
-## Technology Stack
+## 🚀 Quick Start
 
-* **Programming Language:** TypeScript
-* **MCP Server Library:** `@modelcontextprotocol/server` (Node.js)
-* **GitHub API Client Library:** `@octokit/graphql.js` (Node.js)
-* **Caching Library (Optional):** `node-cache` or `redis`
-* **Configuration Management:** `dotenv`
-* **Logging:** Built-in `console` or `pinot`
+### Installation
 
-## Getting Started
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/gitcp.git
+cd gitcp
 
-Follow these steps to set up and run your GitCP server:
+# Install dependencies
+pnpm install
 
-1.  **Clone the repository:**
-    ```bash
-    git clone [YOUR_REPOSITORY_URL]
-    cd gitcp
-    ```
+# Set up your GitHub token (required)
+echo "GITHUB_TOKEN=your_github_token" > .env
 
-2.  **Install dependencies:**
-    ```bash
-    npm install
-    ```
+# Start the server
+pnpm start
+```
 
-3.  **Create a `.env` file:** In the root directory, create a `.env` file and add your GitHub Personal Access Token (you can generate one [here](https://github.com/settings/tokens)) and the desired MCP server port:
-    ```env
-    GITHUB_TOKEN=YOUR_GITHUB_PERSONAL_ACCESS_TOKEN
-    MCP_SERVER_PORT=3000
-    ```
+### Usage with LLMs
 
-4.  **Implement the server logic:** The core logic for interacting with the GitHub API and processing the context resides in the `src` directory. You will find example structures for `mcp-server.ts`, `github-client.ts`, and `context-processor.ts`. You will need to implement the specific functionality within these files based on your needs.
+Connect your MCP-compatible LLM to the GitCP server endpoint:
 
-5.  **Build the project:**
-    ```bash
-    npm run build
-    ```
+```
+http://localhost:3000/api/mcp
+```
 
-6.  **Run the server:**
-    ```bash
-    npm run start
-    ```
+Your LLM will now have access to tools like:
+- `get-repository-info`: Get detailed information about a repository
+- `get-repository-readme`: Retrieve the current README content
+- `get-repository-api-docs`: Extract API documentation
+- `search-repository-files`: Find files in a repository
+- `get-file-content`: Retrieve specific file contents
 
-    Alternatively, for development with live reloading (if configured):
-    ```bash
-    npm run dev
-    ```
+## 🔍 Example Scenario
 
-The GitCP server will now be running and listening for MCP requests on the specified port.
+Ask your MCP-enabled AI assistant:
 
-## Usage
+> "What are the available methods in the axios library for handling request interceptors?"
 
-Once the GitCP server is running, an MCP-compatible LLM can connect to it and query information about GitHub repositories. The server exposes tools that the LLM can call, such as:
+Instead of getting outdated or generic information, your assistant can:
+1. Use `get-repository-api-docs` to fetch the latest axios API documentation
+2. Analyze the current documentation for interceptor methods
+3. Provide you with accurate, up-to-date information
 
-* `getRepositoryApiDocs`: Fetches and summarizes API documentation for a given repository (owner and name as parameters).
-* `getRepositoryDesignOverview`: (Currently conceptual) Aims to provide an overview of the repository's design.
+## 🧰 Architecture
 
-The exact tools and their parameters will be defined in your `src/mcp-server.ts` file. The LLM will use the MCP protocol to list available tools and then call the desired tools with the appropriate parameters to retrieve information.
+GitCP follows a modular design:
 
-## Configuration
+```
+┌─────────────────┐       ┌──────────────┐       ┌────────────────┐
+│   MCP Server    │◄─────►│  GitHub API  │◄─────►│  GitHub.com    │
+│  (TypeScript)   │       │    Client    │       │                │
+└────────┬────────┘       └──────────────┘       └────────────────┘
+         │
+         │
+┌────────▼────────┐       ┌──────────────┐
+│ Context         │       │   Caching    │
+│ Processors      │◄─────►│   System     │
+└─────────────────┘       └──────────────┘
+```
 
-The following environment variables can be configured in the `.env` file:
+- **MCP Server:** Handles the Model Context Protocol communication
+- **GitHub API Client:** Manages GitHub REST and GraphQL API interactions
+- **Context Processors:** Extract and organize relevant information
+- **Caching System:** Improves performance and reduces API load
 
-* `GITHUB_TOKEN`: Your GitHub Personal Access Token. This is necessary to authenticate with the GitHub API and avoid rate limits.
-* `MCP_SERVER_PORT`: The port on which the GitCP server will listen for MCP requests (default: `3000`).
+## 🧠 Why It Matters
 
-You can also configure caching behavior and other settings within the respective modules in the `src` directory.
+Traditional AI assistants struggle with:
+- Outdated knowledge of repositories
+- Incomplete understanding of project structure
+- Inability to see recent changes and updates
 
-## Contributing
+GitCP solves these problems by giving LLMs a direct line to GitHub's latest information, making your AI assistants more accurate, more helpful, and more in sync with your evolving codebase.
 
-Contributions to the GitCP project are welcome! If you have ideas for new features, improvements, or bug fixes, please feel free to:
+## 🛠️ Development
 
-1.  Fork the repository.
-2.  Create a new branch for your feature or fix.
-3.  Implement your changes.
-4.  Submit a pull request.
+```bash
+# Build the project
+pnpm run build
 
-Please ensure that your code adheres to the project's coding standards and includes appropriate tests.
+# Run tests
+pnpm test
 
-## License
+# Lint your code
+pnpm run lint
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+# Format your code
+pnpm run format
+```
 
-## Contact
+## 📝 License
 
-If you have any questions, suggestions, or issues, please feel free to [open an issue](https://github.com/YOUR_USERNAME/YOUR_REPOSITORY_NAME/issues) on the repository.
+This project is MIT licensed - see the [LICENSE](LICENSE) file for details.
+
+---
+
+<p align="center">
+  <i>GitCP: Because your AI assistant should understand your code as well as you do.</i>
+</p>
