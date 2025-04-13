@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { registerGitHubTools } from "./tools";
+import { registerGitHubTools } from "./tools/index.js";
 import * as github from "./github/index.js";
 import dotenv from "dotenv";
 

@@ -13,7 +13,7 @@ export {
   TokenSource,
   TokenInfo,
   clearTokenCache,
-} from "./utils/getToken";
+} from "./utils/getToken.js";
 
 // Export cache utilities
 export * as cache from "./utils/cache.js";

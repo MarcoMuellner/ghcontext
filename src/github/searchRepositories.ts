@@ -1,5 +1,5 @@
 import * as cache from "./utils/cache.js";
-import { getGraphQLClientSingleton } from "./utils/client";
+import { getGraphQLClientSingleton } from "./utils/client.js";
 
 /**
  * Repository search result interface
