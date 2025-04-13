@@ -20,7 +20,7 @@ vi.mock('../github/index.js', () => {
         getRepositoryStructure: vi.fn(),
         searchRepositoryCode: vi.fn()
     };
-}, { virtual: true });
+});
 
 // Import the mocked module
 import * as github from '../github/index.js';

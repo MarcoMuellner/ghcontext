@@ -13,11 +13,11 @@ vi.mock('node-cache', () => {
         flushAll: vi.fn(),
         getStats: vi.fn()
     };
-    
+
     return {
         default: vi.fn().mockImplementation(() => mockInstance)
     };
-}, { virtual: true });
+});
 
 // Import after mocking
 import * as cache from './cache';
@@ -25,13 +25,13 @@ import * as cache from './cache';
 describe('Cache Utilities', () => {
     // Get the mock instance from the NodeCache constructor
     const mockInstance = (NodeCache as unknown as ReturnType<typeof vi.fn>).mock.results[0]?.value;
-    
+
     beforeEach(() => {
         resetGitHubTestEnvironment();
 
         // Reset mocks
         vi.clearAllMocks();
-        
+
         // Set environment variable
         process.env.CACHE_TTL = '500';
     });
