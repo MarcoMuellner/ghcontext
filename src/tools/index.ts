@@ -1,7 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import * as github from "../github/index.js";
-import { CodeSearchResultItem } from "../github/searchFiles";
+import { CodeSearchResultItem } from "../github/searchFiles.js";
 
 /**
  * Register GitHub tools with the MCP server

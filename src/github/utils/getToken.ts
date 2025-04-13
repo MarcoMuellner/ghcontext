@@ -106,7 +106,6 @@ let tokenInstance: TokenInfo | null = null;
 export function getToken(customToken?: string): TokenInfo {
   if (!tokenInstance || customToken) {
     tokenInstance = getGitHubToken(customToken);
-    console.log(`Using GitHub token from ${tokenInstance.source}`);
   }
   return tokenInstance;
 }

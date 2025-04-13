@@ -56,7 +56,6 @@ export async function getReadmeContent(
   } catch (error) {
     // Handle 404 error (README not found) differently
     if ((error as RequestError).status === 404) {
-      console.log(`README not found for ${owner}/${name}`);
       cache.set(cacheKey, null);
       return null;
     }
@@ -118,7 +117,6 @@ export async function getReadmeContentByPath(
   } catch (error) {
     // Handle 404 error (file not found) differently
     if ((error as RequestError).status === 404) {
-      console.log(`File not found: ${path} in ${owner}/${name}`);
       cache.set(cacheKey, null);
       return null;
     }

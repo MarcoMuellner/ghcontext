@@ -54,7 +54,6 @@ export async function extractApiDocumentation(
     // Get README content
     const readme = await getReadmeContent(owner, name);
     if (!readme) {
-      console.log(`README not found for ${owner}/${name}`);
       cache.set(cacheKey, null);
       return null;
     }

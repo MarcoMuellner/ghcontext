@@ -21,7 +21,6 @@ dotenv.config();
 // Log token source information (but not the token itself)
 try {
   const { source } = github.getToken(githubToken);
-  console.log(`Using GitHub token from: ${source}`);
 } catch {
   console.error(
     "GitHub token not found. Please set GITHUB_TOKEN environment variable, pass it with --GITHUB_TOKEN, or authenticate with GitHub CLI.",
@@ -33,8 +32,6 @@ try {
  * Main function to run the server
  */
 async function main() {
-  console.log("Starting GitCP MCP server...");
-
   // Create server instance
   const server = new McpServer({
     name: "GitCP",
@@ -52,9 +49,6 @@ async function main() {
   // Set up transport
   const transport = new StdioServerTransport();
   await server.connect(transport);
-
-  console.log("GitCP MCP server running");
-  console.log("Waiting for connections...");
 }
 
 // Run the server
