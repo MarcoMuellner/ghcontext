@@ -46,7 +46,23 @@ describe("GitHub Token Utilities", () => {
   });
 
   describe("getGitHubToken", () => {
-    it("should retrieve token from environment variable when available", () => {
+    it("should use provided custom token when available", () => {
+      // Arrange
+      process.env.GITHUB_TOKEN = "env-token-123";
+      const customToken = "cli-argument-token";
+
+      // Act
+      const result = getGitHubToken(customToken);
+
+      // Assert
+      expect(result).toEqual({
+        token: customToken,
+        source: TokenSource.COMMAND_LINE,
+      });
+      expect(fs.existsSync).not.toHaveBeenCalled(); // Shouldn't check other sources
+    });
+
+    it("should retrieve token from environment variable when available and no custom token", () => {
       // Arrange
       process.env.GITHUB_TOKEN = "env-token-123";
 
@@ -118,6 +134,26 @@ describe("GitHub Token Utilities", () => {
   });
 
   describe("getToken", () => {
+    it("should use custom token when provided even if cache exists", () => {
+      // Arrange
+      process.env.GITHUB_TOKEN = "env-token-123";
+      
+      // First call with no custom token (uses env var)
+      const result1 = getToken();
+      
+      // Second call with custom token (should override cache)
+      const customToken = "custom-cli-token";
+      const result2 = getToken(customToken);
+      
+      // Assert
+      expect(result1.token).toBe("env-token-123");
+      expect(result1.source).toBe(TokenSource.ENVIRONMENT);
+      
+      expect(result2.token).toBe(customToken);
+      expect(result2.source).toBe(TokenSource.COMMAND_LINE);
+      expect(result1).not.toEqual(result2);
+    });
+    
     it("should cache token for subsequent calls", () => {
       // Arrange
       process.env.GITHUB_TOKEN = "env-token-123";

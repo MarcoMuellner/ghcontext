@@ -5,16 +5,26 @@ import { registerGitHubTools } from "./tools/index.js";
 import * as github from "./github/index.js";
 import dotenv from "dotenv";
 
+// Parse command-line arguments
+let githubToken: string | undefined;
+for (let i = 2; i < process.argv.length; i++) {
+  const arg = process.argv[i];
+  if (arg === "--GITHUB_TOKEN" || arg === "--github-token") {
+    githubToken = process.argv[i + 1];
+    i++; // Skip the next argument as it's the token value
+  }
+}
+
 // Load environment variables
 dotenv.config();
 
 // Log token source information (but not the token itself)
 try {
-  const { source } = github.getToken();
+  const { source } = github.getToken(githubToken);
   console.log(`Using GitHub token from: ${source}`);
 } catch {
   console.error(
-    "GitHub token not found. Please set GITHUB_TOKEN environment variable or authenticate with GitHub CLI.",
+    "GitHub token not found. Please set GITHUB_TOKEN environment variable, pass it with --GITHUB_TOKEN, or authenticate with GitHub CLI.",
   );
   process.exit(1);
 }

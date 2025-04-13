@@ -40,11 +40,14 @@ cd gitcp
 # Install dependencies
 pnpm install
 
-# Set up your GitHub token (required)
+# Set up your GitHub token (required) - Option 1: Environment variable
 echo "GITHUB_TOKEN=your_github_token" > .env
 
 # Start the server
 pnpm start
+
+# OR using Option 2: Command-line argument
+pnpm start --GITHUB_TOKEN your_github_token
 ```
 
 ### Usage with LLMs

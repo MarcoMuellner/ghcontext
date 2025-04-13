@@ -11,6 +11,8 @@ dotenv.config();
  * @enum {string}
  */
 export enum TokenSource {
+  /** Token provided via command line argument */
+  COMMAND_LINE = "command_line",
   /** Token retrieved from environment variable */
   ENVIRONMENT = "environment",
   /** Token retrieved from GitHub CLI configuration */
@@ -35,13 +37,22 @@ export interface TokenInfo {
  *
  * This function attempts to find a valid GitHub token from the following sources
  * in order of preference:
- * 1. GITHUB_TOKEN environment variable
- * 2. GitHub CLI configuration (~/.config/gh/hosts.yml)
+ * 1. Custom token passed as an argument (if provided)
+ * 2. GITHUB_TOKEN environment variable
+ * 3. GitHub CLI configuration (~/.config/gh/hosts.yml)
  *
+ * @param {string|undefined} customToken - Optional custom token provided via command line
  * @throws {Error} If no valid token can be found from any source
  * @returns {TokenInfo} Object containing the token and its source
  */
-export function getGitHubToken(): TokenInfo {
+export function getGitHubToken(customToken?: string): TokenInfo {
+  // First check if a custom token was provided
+  if (customToken) {
+    return {
+      token: customToken,
+      source: TokenSource.COMMAND_LINE,
+    };
+  }
   // First check environment variable
   if (process.env.GITHUB_TOKEN) {
     return {
@@ -88,12 +99,13 @@ let tokenInstance: TokenInfo | null = null;
  *
  * Retrieves the token only once and caches it for subsequent calls
  *
+ * @param {string|undefined} customToken - Optional custom token provided via command line
  * @returns {TokenInfo} The GitHub token information
  * @throws {Error} If no valid token can be found
  */
-export function getToken(): TokenInfo {
-  if (!tokenInstance) {
-    tokenInstance = getGitHubToken();
+export function getToken(customToken?: string): TokenInfo {
+  if (!tokenInstance || customToken) {
+    tokenInstance = getGitHubToken(customToken);
     console.log(`Using GitHub token from ${tokenInstance.source}`);
   }
   return tokenInstance;
