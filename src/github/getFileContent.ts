@@ -1,6 +1,6 @@
 import { getRESTClientSingleton } from "./utils/client.js";
 import * as cache from "./utils/cache.js";
-import {RequestError} from "./utils/errors";
+import { RequestError } from "./utils/errors";
 
 /**
  * Get the content of a specific file from a GitHub repository
@@ -26,55 +26,55 @@ import {RequestError} from "./utils/errors";
  * const readme = await getFileContent("facebook", "react", "README.md", "experimental");
  */
 export async function getFileContent(
-    owner: string,
-    name: string,
-    path: string,
-    ref?: string
+  owner: string,
+  name: string,
+  path: string,
+  ref?: string,
 ): Promise<string> {
-    // Generate cache key (include ref if provided)
-    const cacheKey = ref
-        ? `file:${owner}/${name}:${path}:${ref}`
-        : `file:${owner}/${name}:${path}`;
+  // Generate cache key (include ref if provided)
+  const cacheKey = ref
+    ? `file:${owner}/${name}:${path}:${ref}`
+    : `file:${owner}/${name}:${path}`;
 
-    // Check cache first
-    const cachedResult = cache.get<string>(cacheKey);
-    if (cachedResult) {
-        return cachedResult;
+  // Check cache first
+  const cachedResult = cache.get<string>(cacheKey);
+  if (cachedResult) {
+    return cachedResult;
+  }
+
+  try {
+    // Get REST client
+    const octokit = getRESTClientSingleton();
+
+    // Fetch file content
+    const { data } = await octokit.repos.getContent({
+      owner,
+      repo: name,
+      path,
+      ref,
+    });
+
+    // Ensure we got a file, not a directory
+    if (Array.isArray(data) || data.type !== "file") {
+      throw new Error(`Path does not point to a file: ${path}`);
     }
 
-    try {
-        // Get REST client
-        const octokit = getRESTClientSingleton();
+    // Decode content from base64
+    const content = Buffer.from(data.content, "base64").toString("utf-8");
 
-        // Fetch file content
-        const { data } = await octokit.repos.getContent({
-            owner,
-            repo: name,
-            path,
-            ref
-        });
+    // Save to cache
+    cache.set(cacheKey, content);
+    return content;
+  } catch (error) {
+    console.error(`Error fetching file ${path} from ${owner}/${name}:`, error);
 
-        // Ensure we got a file, not a directory
-        if (Array.isArray(data) || data.type !== 'file') {
-            throw new Error(`Path does not point to a file: ${path}`);
-        }
-
-        // Decode content from base64
-        const content = Buffer.from(data.content, 'base64').toString('utf-8');
-
-        // Save to cache
-        cache.set(cacheKey, content);
-        return content;
-    } catch (error) {
-        console.error(`Error fetching file ${path} from ${owner}/${name}:`, error);
-
-        // Handle 404 error (file not found)
-        if ((error as RequestError).status === 404) {
-            throw new Error(`File not found: ${path} in ${owner}/${name}`);
-        }
-
-        throw new Error(`GitHub API error: ${(error as Error).message}`);
+    // Handle 404 error (file not found)
+    if ((error as RequestError).status === 404) {
+      throw new Error(`File not found: ${path} in ${owner}/${name}`);
     }
+
+    throw new Error(`GitHub API error: ${(error as Error).message}`);
+  }
 }
 
 /**
@@ -101,42 +101,45 @@ export async function getFileContent(
  * const oldCode = await getRawFileContent("user", "repo", "src/index.js", "abc123");
  */
 export async function getRawFileContent(
-    owner: string,
-    name: string,
-    path: string,
-    ref: string = "main"
+  owner: string,
+  name: string,
+  path: string,
+  ref: string = "main",
 ): Promise<Buffer> {
-    // Generate cache key
-    const cacheKey = `raw-file:${owner}/${name}:${path}:${ref}`;
+  // Generate cache key
+  const cacheKey = `raw-file:${owner}/${name}:${path}:${ref}`;
 
-    // Check cache first (but only if it's small enough)
-    const cachedResult = cache.get<Buffer>(cacheKey);
-    if (cachedResult) {
-        return cachedResult;
+  // Check cache first (but only if it's small enough)
+  const cachedResult = cache.get<Buffer>(cacheKey);
+  if (cachedResult) {
+    return cachedResult;
+  }
+
+  try {
+    // Construct raw content URL
+    const rawUrl = `https://raw.githubusercontent.com/${owner}/${name}/${ref}/${path}`;
+
+    // Fetch raw content
+    const response = await fetch(rawUrl);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
-    try {
-        // Construct raw content URL
-        const rawUrl = `https://raw.githubusercontent.com/${owner}/${name}/${ref}/${path}`;
+    // Get content as buffer
+    const buffer = Buffer.from(await response.arrayBuffer());
 
-        // Fetch raw content
-        const response = await fetch(rawUrl);
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        // Get content as buffer
-        const buffer = Buffer.from(await response.arrayBuffer());
-
-        // Only cache if file is smaller than 1MB
-        if (buffer.length < 1024 * 1024) {
-            cache.set(cacheKey, buffer);
-        }
-
-        return buffer;
-    } catch (error) {
-        console.error(`Error fetching raw file ${path} from ${owner}/${name}:`, error);
-        throw new Error(`Failed to fetch raw file: ${(error as Error).message}`);
+    // Only cache if file is smaller than 1MB
+    if (buffer.length < 1024 * 1024) {
+      cache.set(cacheKey, buffer);
     }
+
+    return buffer;
+  } catch (error) {
+    console.error(
+      `Error fetching raw file ${path} from ${owner}/${name}:`,
+      error,
+    );
+    throw new Error(`Failed to fetch raw file: ${(error as Error).message}`);
+  }
 }

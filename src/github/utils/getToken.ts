@@ -11,12 +11,12 @@ dotenv.config();
  * @enum {string}
  */
 export enum TokenSource {
-    /** Token retrieved from environment variable */
-    ENVIRONMENT = "environment",
-    /** Token retrieved from GitHub CLI configuration */
-    GITHUB_CLI = "github_cli",
-    /** No token source available */
-    NONE = "none"
+  /** Token retrieved from environment variable */
+  ENVIRONMENT = "environment",
+  /** Token retrieved from GitHub CLI configuration */
+  GITHUB_CLI = "github_cli",
+  /** No token source available */
+  NONE = "none",
 }
 
 /**
@@ -24,10 +24,10 @@ export enum TokenSource {
  * @interface
  */
 export interface TokenInfo {
-    /** The GitHub authentication token */
-    token: string;
-    /** Source from which the token was retrieved */
-    source: TokenSource;
+  /** The GitHub authentication token */
+  token: string;
+  /** Source from which the token was retrieved */
+  source: TokenSource;
 }
 
 /**
@@ -42,39 +42,39 @@ export interface TokenInfo {
  * @returns {TokenInfo} Object containing the token and its source
  */
 export function getGitHubToken(): TokenInfo {
-    // First check environment variable
-    if (process.env.GITHUB_TOKEN) {
+  // First check environment variable
+  if (process.env.GITHUB_TOKEN) {
+    return {
+      token: process.env.GITHUB_TOKEN,
+      source: TokenSource.ENVIRONMENT,
+    };
+  }
+
+  // Try to get token from GitHub CLI
+  try {
+    const homeDir = os.homedir();
+    const ghConfigPath = path.join(homeDir, ".config", "gh", "hosts.yml");
+
+    if (fs.existsSync(ghConfigPath)) {
+      const configFile = fs.readFileSync(ghConfigPath, "utf8");
+      const config = yaml.parse(configFile);
+
+      // Extract token from github.com host
+      if (config && config["github.com"] && config["github.com"].oauth_token) {
         return {
-            token: process.env.GITHUB_TOKEN,
-            source: TokenSource.ENVIRONMENT
+          token: config["github.com"].oauth_token,
+          source: TokenSource.GITHUB_CLI,
         };
+      }
     }
+  } catch (error) {
+    console.warn("Could not read GitHub CLI token:", error);
+  }
 
-    // Try to get token from GitHub CLI
-    try {
-        const homeDir = os.homedir();
-        const ghConfigPath = path.join(homeDir, '.config', 'gh', 'hosts.yml');
-
-        if (fs.existsSync(ghConfigPath)) {
-            const configFile = fs.readFileSync(ghConfigPath, 'utf8');
-            const config = yaml.parse(configFile);
-
-            // Extract token from github.com host
-            if (config && config['github.com'] && config['github.com'].oauth_token) {
-                return {
-                    token: config['github.com'].oauth_token,
-                    source: TokenSource.GITHUB_CLI
-                };
-            }
-        }
-    } catch (error) {
-        console.warn("Could not read GitHub CLI token:", error);
-    }
-
-    throw new Error(
-        "GitHub token not found. Please set GITHUB_TOKEN environment variable " +
-        "or authenticate with GitHub CLI using 'gh auth login'."
-    );
+  throw new Error(
+    "GitHub token not found. Please set GITHUB_TOKEN environment variable " +
+      "or authenticate with GitHub CLI using 'gh auth login'.",
+  );
 }
 
 /**
@@ -92,11 +92,11 @@ let tokenInstance: TokenInfo | null = null;
  * @throws {Error} If no valid token can be found
  */
 export function getToken(): TokenInfo {
-    if (!tokenInstance) {
-        tokenInstance = getGitHubToken();
-        console.log(`Using GitHub token from ${tokenInstance.source}`);
-    }
-    return tokenInstance;
+  if (!tokenInstance) {
+    tokenInstance = getGitHubToken();
+    console.log(`Using GitHub token from ${tokenInstance.source}`);
+  }
+  return tokenInstance;
 }
 
 /**
@@ -107,5 +107,5 @@ export function getToken(): TokenInfo {
  * @returns {void}
  */
 export function clearTokenCache(): void {
-    tokenInstance = null;
+  tokenInstance = null;
 }

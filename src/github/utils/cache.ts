@@ -11,9 +11,9 @@ export const DEFAULT_CACHE_TTL = parseInt(process.env.CACHE_TTL || "300", 10); /
  * @type {NodeCache}
  */
 export const cache = new NodeCache({
-    stdTTL: DEFAULT_CACHE_TTL,
-    checkperiod: 120, // Check for expired keys every 2 minutes
-    useClones: false, // Don't clone objects on get/set for better performance
+  stdTTL: DEFAULT_CACHE_TTL,
+  checkperiod: 120, // Check for expired keys every 2 minutes
+  useClones: false, // Don't clone objects on get/set for better performance
 });
 
 /**
@@ -22,7 +22,7 @@ export const cache = new NodeCache({
  * @returns {boolean} True if the key exists in cache, false otherwise
  */
 export function exists(key: string): boolean {
-    return cache.has(key);
+  return cache.has(key);
 }
 
 /**
@@ -32,7 +32,7 @@ export function exists(key: string): boolean {
  * @returns {T | undefined} The cached value or undefined if not found
  */
 export function get<T>(key: string): T | undefined {
-    return cache.get<T>(key);
+  return cache.get<T>(key);
 }
 
 /**
@@ -44,7 +44,7 @@ export function get<T>(key: string): T | undefined {
  * @returns {boolean} True if stored successfully
  */
 export function set<T>(key: string, value: T, ttl?: number): boolean {
-    return cache.set(key, value, ttl ?? DEFAULT_CACHE_TTL);
+  return cache.set(key, value, ttl ?? DEFAULT_CACHE_TTL);
 }
 
 /**
@@ -53,7 +53,7 @@ export function set<T>(key: string, value: T, ttl?: number): boolean {
  * @returns {number} Number of items deleted (0 or 1)
  */
 export function del(key: string): number {
-    return cache.del(key);
+  return cache.del(key);
 }
 
 /**
@@ -61,7 +61,7 @@ export function del(key: string): number {
  * @returns {void}
  */
 export function clear(): void {
-    cache.flushAll();
+  cache.flushAll();
 }
 
 /**
@@ -69,5 +69,5 @@ export function clear(): void {
  * @returns {NodeCache.Stats} Cache statistics
  */
 export function getStats(): NodeCache.Stats {
-    return cache.getStats();
+  return cache.getStats();
 }

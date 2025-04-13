@@ -1,12 +1,12 @@
 export interface RequestError extends Error {
-    status?: number;
+  status?: number;
 }
 
 export interface GraphQLError {
-    message: string;
-    type?: string;
+  message: string;
+  type?: string;
 }
 
 export interface GraphQLResponse {
-    errors?: GraphQLError[];
+  errors?: GraphQLError[];
 }

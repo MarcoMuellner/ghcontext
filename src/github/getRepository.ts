@@ -1,19 +1,19 @@
 import { getGraphQLClientSingleton } from "./utils/client.js";
 import * as cache from "./utils/cache.js";
-import {GraphQLError, GraphQLResponse} from "./utils/errors.js";
+import { GraphQLError, GraphQLResponse } from "./utils/errors.js";
 
 /**
  * Language edge interface
  * @interface
  */
 export interface LanguageEdge {
-    /** Language node */
-    node: {
-        /** Language name */
-        name: string;
-    };
-    /** Size of code in this language (bytes) */
-    size: number;
+  /** Language node */
+  node: {
+    /** Language name */
+    name: string;
+  };
+  /** Size of code in this language (bytes) */
+  size: number;
 }
 
 /**
@@ -21,46 +21,46 @@ export interface LanguageEdge {
  * @interface
  */
 export interface Repository {
-    /** Full repository name with owner (e.g., "owner/name") */
-    nameWithOwner: string;
-    /** Repository description */
-    description: string | null;
-    /** Repository URL */
-    url: string;
-    /** Homepage URL */
-    homepageUrl: string | null;
-    /** Number of stargazers */
-    stargazerCount: number;
-    /** Number of forks */
-    forkCount: number;
-    /** Whether the repository is archived */
-    isArchived: boolean;
-    /** Whether the repository is a template */
-    isTemplate: boolean;
-    /** Primary language information */
-    primaryLanguage: {
-        /** Language name */
-        name: string;
-    } | null;
-    /** Repository languages */
-    languages: {
-        /** Language edges */
-        edges: LanguageEdge[];
-    };
-    /** Default branch reference */
-    defaultBranchRef: {
-        /** Branch name */
-        name: string;
-    } | null;
-    /** License information */
-    licenseInfo: {
-        /** License name */
-        name: string;
-        /** SPDX license identifier */
-        spdxId: string;
-    } | null;
-    /** Last updated timestamp */
-    updatedAt: string;
+  /** Full repository name with owner (e.g., "owner/name") */
+  nameWithOwner: string;
+  /** Repository description */
+  description: string | null;
+  /** Repository URL */
+  url: string;
+  /** Homepage URL */
+  homepageUrl: string | null;
+  /** Number of stargazers */
+  stargazerCount: number;
+  /** Number of forks */
+  forkCount: number;
+  /** Whether the repository is archived */
+  isArchived: boolean;
+  /** Whether the repository is a template */
+  isTemplate: boolean;
+  /** Primary language information */
+  primaryLanguage: {
+    /** Language name */
+    name: string;
+  } | null;
+  /** Repository languages */
+  languages: {
+    /** Language edges */
+    edges: LanguageEdge[];
+  };
+  /** Default branch reference */
+  defaultBranchRef: {
+    /** Branch name */
+    name: string;
+  } | null;
+  /** License information */
+  licenseInfo: {
+    /** License name */
+    name: string;
+    /** SPDX license identifier */
+    spdxId: string;
+  } | null;
+  /** Last updated timestamp */
+  updatedAt: string;
 }
 
 /**
@@ -68,8 +68,8 @@ export interface Repository {
  * @interface
  */
 export interface RepositoryResponse {
-    /** Repository information */
-    repository: Repository;
+  /** Repository information */
+  repository: Repository;
 }
 
 /**
@@ -94,24 +94,25 @@ export interface RepositoryResponse {
  * });
  */
 export async function getRepository(
-    owner: string,
-    name: string
+  owner: string,
+  name: string,
 ): Promise<RepositoryResponse> {
-    // Generate cache key
-    const cacheKey = `repo:${owner}/${name}`;
+  // Generate cache key
+  const cacheKey = `repo:${owner}/${name}`;
 
-    // Check cache first
-    const cachedResult = cache.get<RepositoryResponse>(cacheKey);
-    if (cachedResult) {
-        return cachedResult;
-    }
+  // Check cache first
+  const cachedResult = cache.get<RepositoryResponse>(cacheKey);
+  if (cachedResult) {
+    return cachedResult;
+  }
 
-    try {
-        // Get GraphQL client
-        const graphqlWithAuth = getGraphQLClientSingleton();
+  try {
+    // Get GraphQL client
+    const graphqlWithAuth = getGraphQLClientSingleton();
 
-        // Execute query
-        const result = await graphqlWithAuth<RepositoryResponse>(`
+    // Execute query
+    const result = await graphqlWithAuth<RepositoryResponse>(
+      `
       query getRepository($owner: String!, $name: String!) {
         repository(owner: $owner, name: $name) {
           nameWithOwner
@@ -143,25 +144,31 @@ export async function getRepository(
           updatedAt
         }
       }
-    `, {
-            owner,
-            name
-        });
+    `,
+      {
+        owner,
+        name,
+      },
+    );
 
-        // Save to cache
-        cache.set(cacheKey, result);
-        return result;
-    } catch (error) {
-        console.error(`Error fetching repository ${owner}/${name}:`, error);
+    // Save to cache
+    cache.set(cacheKey, result);
+    return result;
+  } catch (error) {
+    console.error(`Error fetching repository ${owner}/${name}:`, error);
 
-        // Check for specific GraphQL errors that indicate repository not found
-        const gqlError = error as GraphQLResponse;
-        if (gqlError.errors && gqlError.errors.some((e: GraphQLError) =>
-            e.type === 'NOT_FOUND' || e.message.includes('Could not resolve')
-        )) {
-            throw new Error(`Repository not found: ${owner}/${name}`);
-        }
-
-        throw new Error(`GitHub API error: ${(error as Error).message}`);
+    // Check for specific GraphQL errors that indicate repository not found
+    const gqlError = error as GraphQLResponse;
+    if (
+      gqlError.errors &&
+      gqlError.errors.some(
+        (e: GraphQLError) =>
+          e.type === "NOT_FOUND" || e.message.includes("Could not resolve"),
+      )
+    ) {
+      throw new Error(`Repository not found: ${owner}/${name}`);
     }
+
+    throw new Error(`GitHub API error: ${(error as Error).message}`);
+  }
 }

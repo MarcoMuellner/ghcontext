@@ -17,14 +17,14 @@ const USER_AGENT = "GitCP/1.0.0";
  * @returns {typeof graphql} Authenticated GraphQL client
  */
 export function getGraphQLClient() {
-    const { token } = getToken();
+  const { token } = getToken();
 
-    return graphql.defaults({
-        headers: {
-            authorization: `token ${token}`,
-            "user-agent": USER_AGENT
-        }
-    });
+  return graphql.defaults({
+    headers: {
+      authorization: `token ${token}`,
+      "user-agent": USER_AGENT,
+    },
+  });
 }
 
 /**
@@ -38,10 +38,10 @@ let graphqlClientInstance: typeof graphql | null = null;
  * @returns {typeof graphql} Authenticated GraphQL client
  */
 export function getGraphQLClientSingleton() {
-    if (!graphqlClientInstance) {
-        graphqlClientInstance = getGraphQLClient();
-    }
-    return graphqlClientInstance;
+  if (!graphqlClientInstance) {
+    graphqlClientInstance = getGraphQLClient();
+  }
+  return graphqlClientInstance;
 }
 
 /**
@@ -53,13 +53,13 @@ export function getGraphQLClientSingleton() {
  * @returns {Octokit} Authenticated Octokit REST client
  */
 export function getRESTClient(): Octokit {
-    const { token } = getToken();
+  const { token } = getToken();
 
-    return new Octokit({
-        auth: token,
-        userAgent: USER_AGENT,
-        timeZone: "UTC"
-    });
+  return new Octokit({
+    auth: token,
+    userAgent: USER_AGENT,
+    timeZone: "UTC",
+  });
 }
 
 /**
@@ -73,10 +73,10 @@ let restClientInstance: Octokit | null = null;
  * @returns {Octokit} Authenticated Octokit REST client
  */
 export function getRESTClientSingleton(): Octokit {
-    if (!restClientInstance) {
-        restClientInstance = getRESTClient();
-    }
-    return restClientInstance;
+  if (!restClientInstance) {
+    restClientInstance = getRESTClient();
+  }
+  return restClientInstance;
 }
 
 /**
@@ -87,6 +87,6 @@ export function getRESTClientSingleton(): Octokit {
  * @returns {void}
  */
 export function clearClientCache(): void {
-    graphqlClientInstance = null;
-    restClientInstance = null;
+  graphqlClientInstance = null;
+  restClientInstance = null;
 }
