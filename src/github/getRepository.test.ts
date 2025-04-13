@@ -3,35 +3,27 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { getRepository } from './getRepository';
 import { resetGitHubTestEnvironment, sampleRepoData } from './__tests__/test-utils';
 import * as cache from './utils/cache';
-import fetchMock from 'fetch-mock';
+
+// Create a mock GraphQL function
+const mockGraphqlFn = vi.fn();
 
 // Mock the GraphQL client
-vi.mock('./utils/client.js', () => {
-    // Create a function to be used for mocking graphql requests
-    const mockGraphqlFn = vi.fn();
-    return {
-        getGraphQLClientSingleton: () => mockGraphqlFn,
-    };
-});
+vi.mock('./utils/client.js', () => ({
+    getGraphQLClientSingleton: () => mockGraphqlFn
+}), { virtual: true });
 
-// Mock the cache
+// Mock the cache module
 vi.mock('./utils/cache.js', () => ({
     get: vi.fn(),
     set: vi.fn(),
-}));
+}), { virtual: true });
 
 describe('getRepository', () => {
-    // GraphQL client mock
-    let mockGraphqlFn: any;
-
     beforeEach(() => {
         resetGitHubTestEnvironment();
 
         // Reset mocks
         vi.clearAllMocks();
-
-        // Get reference to the mocked graphql function
-        mockGraphqlFn = require('./utils/client.js').getGraphQLClientSingleton();
     });
 
     afterEach(() => {

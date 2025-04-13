@@ -8,17 +8,22 @@ const mockServer = {
     tool: vi.fn()
 };
 
-// Mock GitHub modules
-vi.mock('../github/index.js', () => ({
-    searchRepositories: vi.fn(),
-    getRepository: vi.fn(),
-    getReadmeContent: vi.fn(),
-    extractApiDocumentation: vi.fn(),
-    searchFiles: vi.fn(),
-    getFileContent: vi.fn(),
-    getRepositoryStructure: vi.fn(),
-    searchRepositoryCode: vi.fn()
-}));
+// Create mock functions for GitHub module in separate module scope
+vi.mock('../github/index.js', () => {
+    return {
+        searchRepositories: vi.fn(),
+        getRepository: vi.fn(),
+        getReadmeContent: vi.fn(),
+        extractApiDocumentation: vi.fn(),
+        searchFiles: vi.fn(),
+        getFileContent: vi.fn(),
+        getRepositoryStructure: vi.fn(),
+        searchRepositoryCode: vi.fn()
+    };
+}, { virtual: true });
+
+// Import the mocked module
+import * as github from '../github/index.js';
 
 describe('MCP Tools Integration', () => {
     beforeEach(() => {
@@ -80,8 +85,7 @@ describe('MCP Tools Integration', () => {
             )?.[3];
 
             // Mock the getRepository function
-            const github = require('../github/index.js');
-            github.getRepository.mockResolvedValue({
+            vi.mocked(github.getRepository).mockResolvedValue({
                 repository: sampleRepoData
             });
 
@@ -105,9 +109,8 @@ describe('MCP Tools Integration', () => {
             )?.[3];
 
             // Mock the getRepository function to throw an error
-            const github = require('../github/index.js');
             const apiError = new Error('Repository not found');
-            github.getRepository.mockRejectedValue(apiError);
+            vi.mocked(github.getRepository).mockRejectedValue(apiError);
 
             // Act
             const result = await toolHandler({ owner: 'nonexistent', name: 'repo' });
@@ -131,8 +134,7 @@ describe('MCP Tools Integration', () => {
             )?.[3];
 
             // Mock the getReadmeContent function
-            const github = require('../github/index.js');
-            github.getReadmeContent.mockResolvedValue(sampleReadmeContent);
+            vi.mocked(github.getReadmeContent).mockResolvedValue(sampleReadmeContent);
 
             // Act
             const result = await toolHandler({ owner: 'facebook', name: 'react' });
@@ -154,8 +156,7 @@ describe('MCP Tools Integration', () => {
             )?.[3];
 
             // Mock the getReadmeContent function to return null (README not found)
-            const github = require('../github/index.js');
-            github.getReadmeContent.mockResolvedValue(null);
+            vi.mocked(github.getReadmeContent).mockResolvedValue(null);
 
             // Act
             const result = await toolHandler({ owner: 'facebook', name: 'react' });
@@ -178,9 +179,8 @@ describe('MCP Tools Integration', () => {
             )?.[3];
 
             // Mock the extractApiDocumentation function
-            const github = require('../github/index.js');
             const apiDocs = '## API Documentation\n\nSample API documentation';
-            github.extractApiDocumentation.mockResolvedValue(apiDocs);
+            vi.mocked(github.extractApiDocumentation).mockResolvedValue(apiDocs);
 
             // Act
             const result = await toolHandler({ owner: 'facebook', name: 'react' });
@@ -202,8 +202,7 @@ describe('MCP Tools Integration', () => {
             )?.[3];
 
             // Mock the extractApiDocumentation function to return null (no API docs found)
-            const github = require('../github/index.js');
-            github.extractApiDocumentation.mockResolvedValue(null);
+            vi.mocked(github.extractApiDocumentation).mockResolvedValue(null);
 
             // Act
             const result = await toolHandler({ owner: 'facebook', name: 'react' });
