@@ -105,10 +105,10 @@ describe("Repository Structure", () => {
       vi.mocked(cache.get).mockReturnValue(expectedStructure);
 
       // Act
-      const result = await getRepositoryStructure("facebook", "react");
+      const result = await getRepositoryStructure("facebook", "react", ".");
 
       // Assert
-      expect(cache.get).toHaveBeenCalledWith("structure:facebook/react::3");
+      expect(cache.get).toHaveBeenCalledWith("structure:facebook/react:.:3");
       expect(mockRestClient.git.getTree).not.toHaveBeenCalled();
       expect(result).toEqual(expectedStructure);
     });
@@ -132,18 +132,18 @@ describe("Repository Structure", () => {
       });
 
       // Act
-      const result = await getRepositoryStructure("facebook", "react");
+      const result = await getRepositoryStructure("facebook", "react", '.');
 
       // Assert
-      expect(cache.get).toHaveBeenCalledWith("structure:facebook/react::3");
+      expect(cache.get).toHaveBeenCalledWith("structure:facebook/react:.:3");
       expect(mockRestClient.repos.getContent).toHaveBeenCalledWith({
         owner: "facebook",
         repo: "react",
-        path: "",
+        path: ".",
         ref: "main",
       });
       expect(cache.set).toHaveBeenCalledWith(
-        "structure:facebook/react::3",
+        "structure:facebook/react:.:3",
         expect.any(Object),
       );
       expect(result.type).toBe("dir");
