@@ -25,10 +25,10 @@ for (let i = 2; i < process.argv.length; i++) {
 // Show help information if requested
 if (showHelp) {
   console.log(`
-GitCP - GitHub Context Provider for LLMs
+ghcontext - GitHub Context Provider for LLMs
 
 Usage: 
-  gitcp --GITHUB_TOKEN <token> [options]
+  ghcontext --GITHUB_TOKEN <token> [options]
 
 Options:
   --GITHUB_TOKEN <token>    GitHub token for API authentication (REQUIRED)
@@ -37,7 +37,7 @@ Options:
   --version, -v             Show version information
 
 Examples:
-  gitcp --GITHUB_TOKEN your_github_token
+  ghcontext --GITHUB_TOKEN your_github_token
   
   # The token is mandatory and must be provided via command line
   `);
@@ -49,7 +49,7 @@ if (showVersion) {
   const packageJson = JSON.parse(
     fs.readFileSync(new URL("../package.json", import.meta.url), "utf-8"),
   );
-  console.log(`GitCP version ${packageJson.version}`);
+  console.log(`ghcontext version ${packageJson.version}`);
   process.exit(0);
 }
 
@@ -59,7 +59,7 @@ if (showVersion) {
 async function main() {
   // Create server instance
   const server = new McpServer({
-    name: "GitCP",
+    name: "ghcontext",
     version: "1.0.0",
     description: "GitHub Context Provider for LLMs",
     capabilities: {
@@ -89,6 +89,6 @@ async function main() {
 
 // Run the server
 main().catch((error) => {
-  console.error("Error running GitCP server:", error);
+  console.error("Error running ghcontext server:", error);
   process.exit(1);
 });

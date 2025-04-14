@@ -7,7 +7,7 @@ import fetch from "node-fetch"; // Add this import
  * User agent string for GitHub API requests
  * @constant {string}
  */
-const USER_AGENT = "GitCP/1.0.0";
+const USER_AGENT = "ghcontext/1.0.0";
 
 /**
  * Initialize and get a GitHub GraphQL client instance

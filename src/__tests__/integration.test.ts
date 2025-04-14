@@ -98,7 +98,7 @@ describe("MCP Server Integration", () => {
 
     // Create a new MCP server and transport for each test
     server = new McpServer({
-      name: "GitCP-Test",
+      name: "ghcontext-Test",
       version: "1.0.0",
       description: "GitHub Context Provider for LLMs (Test)",
       capabilities: {

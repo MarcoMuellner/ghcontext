@@ -54,7 +54,7 @@ describe("GitHub Client Utilities", () => {
       expect(graphql.defaults).toHaveBeenCalledWith({
         headers: {
           authorization: "token mock-token-123",
-          "user-agent": "GitCP/1.0.0",
+          "user-agent": "ghcontext/1.0.0",
         },
         request: {
           fetch: expect.any(Function), // Check if fetch is a function
@@ -72,7 +72,7 @@ describe("GitHub Client Utilities", () => {
       // Assert
       expect(Octokit).toHaveBeenCalledWith({
         auth: "mock-token-123",
-        userAgent: expect.stringContaining("GitCP/"),
+        userAgent: expect.stringContaining("ghcontext/"),
         timeZone: "UTC",
         request: {
           fetch: expect.any(Function),

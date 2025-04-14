@@ -1,11 +1,11 @@
 {
-  "name": "gitcp",
+  "name": "github-mcp",
   "version": "1.0.1",
   "description": "GitHub Context Provider for LLMs - Access GitHub content through MCP",
   "main": "dist/index.js",
   "type": "module",
   "bin": {
-    "gitcp": "./dist/index.js"
+    "github-mcp": "./dist/index.js"
   },
   "files": [
     "dist"
