@@ -1,10 +1,4 @@
-import dotenv from "dotenv";
-import fs from "fs";
-import path from "path";
-import os from "os";
-import yaml from "yaml";
-
-dotenv.config();
+// No imports needed for just handling command-line tokens
 
 /**
  * GitHub token source enumeration
@@ -13,10 +7,6 @@ dotenv.config();
 export enum TokenSource {
   /** Token provided via command line argument */
   COMMAND_LINE = "command_line",
-  /** Token retrieved from environment variable */
-  ENVIRONMENT = "environment",
-  /** Token retrieved from GitHub CLI configuration */
-  GITHUB_CLI = "github_cli",
   /** No token source available */
   NONE = "none",
 }
@@ -33,58 +23,29 @@ export interface TokenInfo {
 }
 
 /**
- * Retrieves a GitHub authentication token from various sources
+ * Retrieves a GitHub authentication token
  *
- * This function attempts to find a valid GitHub token from the following sources
- * in order of preference:
- * 1. Custom token passed as an argument (if provided)
- * 2. GITHUB_TOKEN environment variable
- * 3. GitHub CLI configuration (~/.config/gh/hosts.yml)
+ * This function accepts a GitHub token provided via command line
  *
- * @param {string|undefined} customToken - Optional custom token provided via command line
- * @throws {Error} If no valid token can be found from any source
+ * @param {string|undefined} customToken - Required token provided via command line
+ * @throws {Error} If no token is provided
  * @returns {TokenInfo} Object containing the token and its source
  */
 export function getGitHubToken(customToken?: string): TokenInfo {
-  // First check if a custom token was provided
+  // Check if a custom token was provided
   if (customToken) {
     return {
       token: customToken,
       source: TokenSource.COMMAND_LINE,
     };
   }
-  // First check environment variable
-  if (process.env.GITHUB_TOKEN) {
-    return {
-      token: process.env.GITHUB_TOKEN,
-      source: TokenSource.ENVIRONMENT,
-    };
-  }
 
-  // Try to get token from GitHub CLI
-  try {
-    const homeDir = os.homedir();
-    const ghConfigPath = path.join(homeDir, ".config", "gh", "hosts.yml");
-
-    if (fs.existsSync(ghConfigPath)) {
-      const configFile = fs.readFileSync(ghConfigPath, "utf8");
-      const config = yaml.parse(configFile);
-
-      // Extract token from github.com host
-      if (config && config["github.com"] && config["github.com"].oauth_token) {
-        return {
-          token: config["github.com"].oauth_token,
-          source: TokenSource.GITHUB_CLI,
-        };
-      }
-    }
-  } catch (error) {
-    console.warn("Could not read GitHub CLI token:", error);
+  if (tokenInstance) {
+    return tokenInstance;
   }
 
   throw new Error(
-    "GitHub token not found. Please set GITHUB_TOKEN environment variable " +
-      "or authenticate with GitHub CLI using 'gh auth login'.",
+    "GitHub token not found. Please provide a token with --GITHUB_TOKEN option."
   );
 }
 
@@ -99,15 +60,23 @@ let tokenInstance: TokenInfo | null = null;
  *
  * Retrieves the token only once and caches it for subsequent calls
  *
- * @param {string|undefined} customToken - Optional custom token provided via command line
+ * @param {string} customToken - Required token provided via command line
  * @returns {TokenInfo} The GitHub token information
- * @throws {Error} If no valid token can be found
+ * @throws {Error} If no token is provided
  */
 export function getToken(customToken?: string): TokenInfo {
   if (!tokenInstance || customToken) {
     tokenInstance = getGitHubToken(customToken);
   }
   return tokenInstance;
+}
+
+export function setToken(customToken: string): TokenInfo {
+    tokenInstance = {
+      token: customToken,
+      source: TokenSource.COMMAND_LINE,
+    }
+    return tokenInstance;
 }
 
 /**

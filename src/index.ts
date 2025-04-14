@@ -3,8 +3,8 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { registerGitHubTools } from "./tools/index.js";
 import * as github from "./github/index.js";
-import dotenv from "dotenv";
 import fs from "fs";
+import {setToken} from "./github/utils/getToken";
 
 // Parse command-line arguments
 let githubToken: string | undefined;
@@ -29,10 +29,10 @@ if (showHelp) {
 GitCP - GitHub Context Provider for LLMs
 
 Usage: 
-  gitcp [options]
+  gitcp --GITHUB_TOKEN <token> [options]
 
 Options:
-  --GITHUB_TOKEN <token>    GitHub token for API authentication
+  --GITHUB_TOKEN <token>    GitHub token for API authentication (REQUIRED)
   --github-token <token>    Alias for --GITHUB_TOKEN
   --help, -h                Show this help information
   --version, -v             Show version information
@@ -40,9 +40,7 @@ Options:
 Examples:
   gitcp --GITHUB_TOKEN your_github_token
   
-  # With environment variable
-  export GITHUB_TOKEN=your_github_token
-  gitcp
+  # The token is mandatory and must be provided via command line
   `);
   process.exit(0);
 }
@@ -54,19 +52,6 @@ if (showVersion) {
   );
   console.log(`GitCP version ${packageJson.version}`);
   process.exit(0);
-}
-
-// Load environment variables
-dotenv.config();
-
-// Log token source information (but not the token itself)
-try {
-  const { source } = github.getToken(githubToken);
-} catch {
-  console.error(
-    "GitHub token not found. Please set GITHUB_TOKEN environment variable, pass it with --GITHUB_TOKEN, or authenticate with GitHub CLI.",
-  );
-  process.exit(1);
 }
 
 /**
@@ -84,7 +69,16 @@ async function main() {
     },
   });
 
-  // Register GitHub tools
+  // Token is required via command-line
+  if (!githubToken) {
+    console.error("ERROR: GitHub token is required. Please provide it with --GITHUB_TOKEN option.");
+    console.log("Run with --help for usage information.");
+    process.exit(1);
+  }
+
+  setToken(githubToken)
+
+  // Register GitHub tools with the GitHub token
   registerGitHubTools(server);
 
   // Set up transport

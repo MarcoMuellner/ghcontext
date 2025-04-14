@@ -41,14 +41,14 @@ npm install -g gitcp
 # OR using pnpm
 pnpm add -g gitcp
 
-# Run GitCP with your GitHub token
+# Run GitCP with your GitHub token (REQUIRED)
 gitcp --GITHUB_TOKEN your_github_token
 ```
 
 #### Method 2: Run without Installation using npx
 
 ```bash
-# Run directly without installation
+# Run directly without installation (GitHub token is REQUIRED)
 npx gitcp --GITHUB_TOKEN your_github_token
 
 # OR using pnpm
@@ -65,13 +65,7 @@ cd gitcp
 # Install dependencies
 pnpm install
 
-# Set up your GitHub token (required) - Option 1: Environment variable
-echo "GITHUB_TOKEN=your_github_token" > .env
-
-# Start the server
-pnpm start
-
-# OR using Option 2: Command-line argument
+# Start the server with GitHub token (REQUIRED)
 pnpm start --GITHUB_TOKEN your_github_token
 ```
 

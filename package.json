@@ -20,7 +20,7 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:ui": "vitest --ui",
-    "prepublishOnly": "npm run lint && npm run test && npm run build"
+    "prepublishOnly": "pnpm run lint && pnpm run test && pnpm run build"
   },
   "keywords": [
     "github",

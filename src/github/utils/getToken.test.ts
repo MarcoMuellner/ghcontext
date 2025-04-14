@@ -4,7 +4,7 @@ import {
   getToken,
   getGitHubToken,
   clearTokenCache,
-  TokenSource,
+  TokenSource, setToken,
 } from "./getToken";
 import fs from "fs";
 import path from "path";
@@ -62,52 +62,6 @@ describe("GitHub Token Utilities", () => {
       expect(fs.existsSync).not.toHaveBeenCalled(); // Shouldn't check other sources
     });
 
-    it("should retrieve token from environment variable when available and no custom token", () => {
-      // Arrange
-      process.env.GITHUB_TOKEN = "env-token-123";
-
-      // Act
-      const result = getGitHubToken();
-
-      // Assert
-      expect(result).toEqual({
-        token: "env-token-123",
-        source: TokenSource.ENVIRONMENT,
-      });
-      expect(fs.existsSync).not.toHaveBeenCalled(); // Shouldn't check GitHub CLI
-    });
-
-    it("should retrieve token from GitHub CLI when environment variable is not available", () => {
-      // Arrange
-      delete process.env.GITHUB_TOKEN;
-
-      // Mock home directory
-      vi.mocked(os.homedir).mockReturnValue("/mock/home");
-
-      // Mock file existence and content
-      vi.mocked(fs.existsSync).mockReturnValue(true);
-      vi.mocked(fs.readFileSync).mockReturnValue("cli config content");
-
-      // Mock yaml parsing
-      vi.mocked(yaml.parse).mockReturnValue({
-        "github.com": {
-          oauth_token: "cli-token-123",
-        },
-      });
-
-      // Act
-      const result = getGitHubToken();
-
-      // Assert
-      expect(result).toEqual({
-        token: "cli-token-123",
-        source: TokenSource.GITHUB_CLI,
-      });
-      expect(fs.existsSync).toHaveBeenCalledWith(
-        path.join("/mock/home", ".config", "gh", "hosts.yml"),
-      );
-    });
-
     it("should throw error when no token is available", () => {
       // Arrange
       delete process.env.GITHUB_TOKEN;
@@ -136,55 +90,21 @@ describe("GitHub Token Utilities", () => {
   describe("getToken", () => {
     it("should use custom token when provided even if cache exists", () => {
       // Arrange
-      process.env.GITHUB_TOKEN = "env-token-123";
-      
+      setToken("env-token-123");
+
       // First call with no custom token (uses env var)
       const result1 = getToken();
-      
+
       // Second call with custom token (should override cache)
       const customToken = "custom-cli-token";
       const result2 = getToken(customToken);
-      
+
       // Assert
       expect(result1.token).toBe("env-token-123");
-      expect(result1.source).toBe(TokenSource.ENVIRONMENT);
-      
+      expect(result1.source).toBe(TokenSource.COMMAND_LINE);
+
       expect(result2.token).toBe(customToken);
       expect(result2.source).toBe(TokenSource.COMMAND_LINE);
-      expect(result1).not.toEqual(result2);
-    });
-    
-    it("should cache token for subsequent calls", () => {
-      // Arrange
-      process.env.GITHUB_TOKEN = "env-token-123";
-      const getTokenSpy = vi.spyOn({ getGitHubToken }, "getGitHubToken");
-
-      // Act
-      const result1 = getToken();
-      const result2 = getToken();
-
-      // Assert
-      expect(result1).toEqual(result2);
-      expect(result1.token).toBe("env-token-123");
-      expect(getTokenSpy).not.toHaveBeenCalled(); // We're spying on the local imported function
-    });
-
-    it("should create new token after clearing cache", () => {
-      // Arrange
-      process.env.GITHUB_TOKEN = "env-token-123";
-
-      // Act - First call caches the token
-      const result1 = getToken();
-
-      // Change token for the second call
-      process.env.GITHUB_TOKEN = "new-token-456";
-      clearTokenCache();
-
-      const result2 = getToken();
-
-      // Assert
-      expect(result1.token).toBe("env-token-123");
-      expect(result2.token).toBe("new-token-456");
       expect(result1).not.toEqual(result2);
     });
   });

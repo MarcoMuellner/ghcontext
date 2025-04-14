@@ -12,8 +12,7 @@ vi.mock(
   "./utils/client.js",
   () => ({
     getGraphQLClientSingleton: () => mockGraphqlFn,
-  }),
-  { virtual: true },
+  })
 );
 
 // Mock the cache
@@ -23,7 +22,6 @@ vi.mock(
     get: vi.fn(),
     set: vi.fn(),
   }),
-  { virtual: true },
 );
 
 describe("searchRepositories", () => {
@@ -118,7 +116,7 @@ describe("searchRepositories", () => {
     expect(cache.get).toHaveBeenCalledWith("repo-search:react:5");
     expect(mockGraphqlFn).toHaveBeenCalledWith(
       expect.stringContaining("query searchRepositories"),
-      { query: "react", limit: 5 },
+      { searchQuery: "react", limit: 5 },
     );
     expect(cache.set).toHaveBeenCalledWith("repo-search:react:5", apiResponse);
     expect(result).toEqual(apiResponse);
@@ -137,7 +135,7 @@ describe("searchRepositories", () => {
     // Assert
     expect(mockGraphqlFn).toHaveBeenCalledWith(
       expect.any(String),
-      { query: "react", limit: 1 }, // Should be sanitized to 1
+      { searchQuery: "react", limit: 1 }, // Should be sanitized to 1
     );
 
     // Reset mocks
@@ -150,7 +148,7 @@ describe("searchRepositories", () => {
     // Assert
     expect(mockGraphqlFn).toHaveBeenCalledWith(
       expect.any(String),
-      { query: "react", limit: 100 }, // Should be sanitized to 100
+      { searchQuery: "react", limit: 100 }, // Should be sanitized to 100
     );
   });
 
@@ -167,7 +165,7 @@ describe("searchRepositories", () => {
     // Assert
     expect(mockGraphqlFn).toHaveBeenCalledWith(
       expect.any(String),
-      { query: "react", limit: 10 }, // Default limit
+      { searchQuery: "react", limit: 10 }, // Default limit
     );
   });
 
