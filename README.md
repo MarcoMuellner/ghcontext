@@ -30,9 +30,26 @@ GitCP (GitHub Context Provider) bridges the gap between GitHub and Large Languag
 
 ## 🚀 Quick Start
 
+### A note on tokens
+
+**GitCP requires a GitHub token for authentication. You are responsible for managing your token securely, and you should give it only the scopes really necessary for your use case. 
+For example, if you only need to read public repositories, you can create a token with the `public_repo` scope. GitCP does not need write access to your repositories.**
+
 ### Installation
 
-#### Method 1: Global Installation from npm
+#### Method 1: Run without Installation using npx
+
+```bash
+# Run directly without installation (GitHub token is REQUIRED)
+npx gitcp --GITHUB_TOKEN your_github_token
+
+# OR using pnpm
+pnpm dlx gitcp --GITHUB_TOKEN your_github_token
+```
+
+This is the preferred way to give it to the claude agent, as it doesn't require any installation and you can run it directly from the command line.
+
+#### Method 2: Global Installation from npm
 
 ```bash
 # Install globally using npm
@@ -43,16 +60,6 @@ pnpm add -g gitcp
 
 # Run GitCP with your GitHub token (REQUIRED)
 gitcp --GITHUB_TOKEN your_github_token
-```
-
-#### Method 2: Run without Installation using npx
-
-```bash
-# Run directly without installation (GitHub token is REQUIRED)
-npx gitcp --GITHUB_TOKEN your_github_token
-
-# OR using pnpm
-pnpm dlx gitcp --GITHUB_TOKEN your_github_token
 ```
 
 #### Method 3: Manual Installation (Development)
