@@ -59,7 +59,7 @@ export type StructureEntry = StructureFile | StructureDirectory;
 export async function getRepositoryStructure(
   owner: string,
   name: string,
-  path: string = "",
+  path: string,
   maxDepth: number = 3,
 ): Promise<StructureEntry> {
   // Generate cache key

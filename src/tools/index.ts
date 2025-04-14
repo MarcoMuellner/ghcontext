@@ -312,7 +312,7 @@ ${repo.description || "No description provided."}
         .default(3)
         .describe("Maximum recursion depth (1-5)"),
     },
-    async ({ owner, name, path = "", maxDepth = 3 }) => {
+    async ({ owner, name, path = ".", maxDepth = 3 }) => {
       try {
         const structure = await github.getRepositoryStructure(
           owner,

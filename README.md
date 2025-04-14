@@ -15,7 +15,7 @@ ghcontext (GitHub Context Provider) bridges the gap between GitHub and Large Lan
 
 ## 🔥 Why ghcontext?
 
-- **Accurate, Real-time Information:** LLMs often have outdated knowledge about repositories. ghcontext provides the latest API docs, README contents, and codebase structure.
+- **Accurate, Real-time Information:** LLMs often have outdated knowledge about repositories. ghcontext provides the latest API docs, README contents, and codebase structure - Also for **private repos**
 - **Deeper Understanding:** Help LLMs grasp your project's architecture, design principles, and API usage patterns.
 - **Seamless Integration:** Compatible with any MCP-enabled models, including Claude, GPT, and others.
 - **Highly Efficient:** Intelligent caching reduces API calls while keeping information fresh.
