@@ -3,7 +3,7 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { registerGitHubTools } from "./tools/index.js";
 import fs from "fs";
-import { setToken } from "./github/utils/getToken";
+import { setToken } from "./github/utils/getToken.js";
 
 // Parse command-line arguments
 let githubToken: string | undefined;
