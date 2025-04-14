@@ -69,8 +69,8 @@ export interface RepositorySearchResponse {
  * });
  */
 export async function searchRepositories(
-    searchQuery: string,
-    limit = 10,
+  searchQuery: string,
+  limit = 10,
 ): Promise<RepositorySearchResponse> {
   // Sanitize inputs
   const sanitizedLimit = Math.min(Math.max(1, limit), 100);

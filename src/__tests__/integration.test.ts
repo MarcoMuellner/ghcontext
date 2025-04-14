@@ -71,22 +71,19 @@ class MockTransport {
 }
 
 // Mock GitHub modules
-vi.mock(
-  "../github/index.js",
-  () => ({
-    getToken: vi
-      .fn()
-      .mockReturnValue({ token: "test-token", source: "environment" }),
-    searchRepositories: vi.fn(),
-    getRepository: vi.fn(),
-    getReadmeContent: vi.fn(),
-    extractApiDocumentation: vi.fn(),
-    searchFiles: vi.fn(),
-    getFileContent: vi.fn(),
-    getRepositoryStructure: vi.fn(),
-    searchRepositoryCode: vi.fn(),
-  }),
-);
+vi.mock("../github/index.js", () => ({
+  getToken: vi
+    .fn()
+    .mockReturnValue({ token: "test-token", source: "environment" }),
+  searchRepositories: vi.fn(),
+  getRepository: vi.fn(),
+  getReadmeContent: vi.fn(),
+  extractApiDocumentation: vi.fn(),
+  searchFiles: vi.fn(),
+  getFileContent: vi.fn(),
+  getRepositoryStructure: vi.fn(),
+  searchRepositoryCode: vi.fn(),
+}));
 
 describe("MCP Server Integration", () => {
   let server: McpServer;

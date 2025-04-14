@@ -2,9 +2,8 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { registerGitHubTools } from "./tools/index.js";
-import * as github from "./github/index.js";
 import fs from "fs";
-import {setToken} from "./github/utils/getToken";
+import { setToken } from "./github/utils/getToken";
 
 // Parse command-line arguments
 let githubToken: string | undefined;
@@ -48,7 +47,7 @@ Examples:
 // Show version information if requested
 if (showVersion) {
   const packageJson = JSON.parse(
-    fs.readFileSync(new URL('../package.json', import.meta.url), 'utf-8')
+    fs.readFileSync(new URL("../package.json", import.meta.url), "utf-8"),
   );
   console.log(`GitCP version ${packageJson.version}`);
   process.exit(0);
@@ -71,12 +70,14 @@ async function main() {
 
   // Token is required via command-line
   if (!githubToken) {
-    console.error("ERROR: GitHub token is required. Please provide it with --GITHUB_TOKEN option.");
+    console.error(
+      "ERROR: GitHub token is required. Please provide it with --GITHUB_TOKEN option.",
+    );
     console.log("Run with --help for usage information.");
     process.exit(1);
   }
 
-  setToken(githubToken)
+  setToken(githubToken);
 
   // Register GitHub tools with the GitHub token
   registerGitHubTools(server);

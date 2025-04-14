@@ -56,9 +56,9 @@ describe("GitHub Client Utilities", () => {
           authorization: "token mock-token-123",
           "user-agent": "GitCP/1.0.0",
         },
-        request : {
-            fetch: expect.any(Function), // Check if fetch is a function
-        }
+        request: {
+          fetch: expect.any(Function), // Check if fetch is a function
+        },
       });
       expect(client).toBe("mocked-graphql-client");
     });
@@ -74,9 +74,9 @@ describe("GitHub Client Utilities", () => {
         auth: "mock-token-123",
         userAgent: expect.stringContaining("GitCP/"),
         timeZone: "UTC",
-        request : {
+        request: {
           fetch: expect.any(Function),
-        }
+        },
       });
     });
   });

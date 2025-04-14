@@ -4,10 +4,10 @@ import {
   getToken,
   getGitHubToken,
   clearTokenCache,
-  TokenSource, setToken,
+  TokenSource,
+  setToken,
 } from "./getToken";
 import fs from "fs";
-import path from "path";
 import os from "os";
 import yaml from "yaml";
 import { resetGitHubTestEnvironment } from "../__tests__/test-utils";

@@ -45,7 +45,7 @@ export function getGitHubToken(customToken?: string): TokenInfo {
   }
 
   throw new Error(
-    "GitHub token not found. Please provide a token with --GITHUB_TOKEN option."
+    "GitHub token not found. Please provide a token with --GITHUB_TOKEN option.",
   );
 }
 
@@ -72,11 +72,11 @@ export function getToken(customToken?: string): TokenInfo {
 }
 
 export function setToken(customToken: string): TokenInfo {
-    tokenInstance = {
-      token: customToken,
-      source: TokenSource.COMMAND_LINE,
-    }
-    return tokenInstance;
+  tokenInstance = {
+    token: customToken,
+    source: TokenSource.COMMAND_LINE,
+  };
+  return tokenInstance;
 }
 
 /**

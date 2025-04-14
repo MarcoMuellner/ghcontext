@@ -8,21 +8,15 @@ import * as cache from "./utils/cache";
 const mockGraphqlFn = vi.fn();
 
 // Mock the GraphQL client
-vi.mock(
-  "./utils/client.js",
-  () => ({
-    getGraphQLClientSingleton: () => mockGraphqlFn,
-  })
-);
+vi.mock("./utils/client.js", () => ({
+  getGraphQLClientSingleton: () => mockGraphqlFn,
+}));
 
 // Mock the cache
-vi.mock(
-  "./utils/cache.js",
-  () => ({
-    get: vi.fn(),
-    set: vi.fn(),
-  }),
-);
+vi.mock("./utils/cache.js", () => ({
+  get: vi.fn(),
+  set: vi.fn(),
+}));
 
 describe("searchRepositories", () => {
   beforeEach(() => {

@@ -1,8 +1,7 @@
 import { graphql } from "@octokit/graphql";
 import { Octokit } from "@octokit/rest";
 import { getToken } from "./getToken.js";
-import fetch from "node-fetch";  // Add this import
-
+import fetch from "node-fetch"; // Add this import
 
 /**
  * User agent string for GitHub API requests
@@ -27,8 +26,8 @@ export function getGraphQLClient() {
       "user-agent": USER_AGENT,
     },
     request: {
-        fetch: fetch,
-    }
+      fetch: fetch,
+    },
   });
 }
 
@@ -64,9 +63,9 @@ export function getRESTClient(): Octokit {
     auth: token,
     userAgent: USER_AGENT,
     timeZone: "UTC",
-    request : {
-      fetch : fetch
-    }
+    request: {
+      fetch: fetch,
+    },
   });
 }
 
