@@ -1,16 +1,16 @@
-# GitCP Project Summary
+# ghcontext Project Summary
 
 ## Overview
 
-GitCP (GitHub Context Provider) addresses a critical gap in how Large Language Models (LLMs) interact with software development resources. While LLMs have revolutionized coding assistance, they often work with outdated or incomplete information about GitHub repositories, limiting their effectiveness as development partners.
+ghcontext (GitHub Context Provider) addresses a critical gap in how Large Language Models (LLMs) interact with software development resources. While LLMs have revolutionized coding assistance, they often work with outdated or incomplete information about GitHub repositories, limiting their effectiveness as development partners.
 
-This project implements a Model Context Protocol (MCP) server that enables LLMs to access real-time, accurate information from GitHub repositories, including API documentation, code structure, and repository metadata. By serving as a bridge between GitHub and AI models, GitCP significantly enhances the quality and accuracy of AI-assisted software development.
+This project implements a Model Context Protocol (MCP) server that enables LLMs to access real-time, accurate information from GitHub repositories, including API documentation, code structure, and repository metadata. By serving as a bridge between GitHub and AI models, ghcontext significantly enhances the quality and accuracy of AI-assisted software development.
 
 ## Core Components
 
 ### 1. MCP Server Implementation
 
-The heart of GitCP is its MCP server, which exposes a standardized interface for LLMs to request specific GitHub information. The server provides a set of tools that LLMs can invoke, such as:
+The heart of ghcontext is its MCP server, which exposes a standardized interface for LLMs to request specific GitHub information. The server provides a set of tools that LLMs can invoke, such as:
 
 - Repository information retrieval
 - README content extraction
@@ -22,7 +22,7 @@ These tools follow the MCP specification, making them compatible with any LLM th
 
 ### 2. GitHub API Integration
 
-GitCP implements comprehensive interaction with GitHub through both REST and GraphQL APIs:
+ghcontext implements comprehensive interaction with GitHub through both REST and GraphQL APIs:
 
 - **REST Client:** Handles specific resource retrieval like file contents, README files, and repository structure
 - **GraphQL Client:** Manages more complex queries such as repository searches and detailed metadata retrieval
@@ -31,7 +31,7 @@ The implementation includes proper authentication, rate limit handling, and erro
 
 ### 3. Intelligent Content Processing
 
-Beyond simple data retrieval, GitCP includes sophisticated processing capabilities:
+Beyond simple data retrieval, ghcontext includes sophisticated processing capabilities:
 
 - **API Documentation Extraction:** Analyzes README files and documentation to identify and extract API-related content based on common patterns and structures
 - **Content Classification:** Identifies relevant sections of documentation that describe interfaces, methods, and examples
@@ -47,7 +47,7 @@ The system is designed for efficient operation:
 
 ### 5. Comprehensive Testing
 
-GitCP includes a robust testing suite:
+ghcontext includes a robust testing suite:
 
 - **Unit Tests:** Verify individual component functionality
 - **Integration Tests:** Ensure proper interaction between components
@@ -63,7 +63,7 @@ GitCP includes a robust testing suite:
 
 ## Impact and Applications
 
-GitCP transforms how AI assistants interact with code repositories by:
+ghcontext transforms how AI assistants interact with code repositories by:
 
 1. **Providing Real-time Context:** Eliminates the knowledge cutoff limitation for repository information
 2. **Enhancing Code Understanding:** Gives LLMs accurate insights into project structure and API usage

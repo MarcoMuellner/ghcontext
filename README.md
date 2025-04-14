@@ -1,4 +1,4 @@
-# GitCP: Supercharge Your LLMs with Real-time GitHub Context
+# ghcontext: Supercharge Your LLMs with Real-time GitHub Context
 
 ![License](https://img.shields.io/badge/License-MIT-green.svg)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue.svg)
@@ -7,15 +7,15 @@
 
 > *"But my GitHub repo changed yesterday..." - Never worry about outdated information in your AI assistants again.*
 
-GitCP (GitHub Context Provider) bridges the gap between GitHub and Large Language Models, giving AI assistants real-time access to repository information through the standardized Model Context Protocol (MCP).
+ghcontext (GitHub Context Provider) bridges the gap between GitHub and Large Language Models, giving AI assistants real-time access to repository information through the standardized Model Context Protocol (MCP).
 
 <p align="center">
-  <img src="docs/images/gitcp-diagram.png" alt="GitCP Architecture" width="600"/>
+  <img src="docs/images/ghcontext-diagram.png" alt="ghcontext Architecture" width="600"/>
 </p>
 
-## 🔥 Why GitCP?
+## 🔥 Why ghcontext?
 
-- **Accurate, Real-time Information:** LLMs often have outdated knowledge about repositories. GitCP provides the latest API docs, README contents, and codebase structure.
+- **Accurate, Real-time Information:** LLMs often have outdated knowledge about repositories. ghcontext provides the latest API docs, README contents, and codebase structure.
 - **Deeper Understanding:** Help LLMs grasp your project's architecture, design principles, and API usage patterns.
 - **Seamless Integration:** Compatible with any MCP-enabled models, including Claude, GPT, and others.
 - **Highly Efficient:** Intelligent caching reduces API calls while keeping information fresh.
@@ -32,8 +32,8 @@ GitCP (GitHub Context Provider) bridges the gap between GitHub and Large Languag
 
 ### A note on tokens
 
-**GitCP requires a GitHub token for authentication. You are responsible for managing your token securely, and you should give it only the scopes really necessary for your use case. 
-For example, if you only need to read public repositories, you can create a token with the `public_repo` scope. GitCP does not need write access to your repositories.**
+**ghcontext requires a GitHub token for authentication. You are responsible for managing your token securely, and you should give it only the scopes really necessary for your use case. 
+For example, if you only need to read public repositories, you can create a token with the `public_repo` scope. ghcontext does not need write access to your repositories.**
 
 ### Installation
 
@@ -41,10 +41,10 @@ For example, if you only need to read public repositories, you can create a toke
 
 ```bash
 # Run directly without installation (GitHub token is REQUIRED)
-npx gitcp --GITHUB_TOKEN your_github_token
+npx ghcontext --GITHUB_TOKEN your_github_token
 
 # OR using pnpm
-pnpm dlx gitcp --GITHUB_TOKEN your_github_token
+pnpm dlx ghcontext --GITHUB_TOKEN your_github_token
 ```
 
 This is the preferred way to give it to the claude agent, as it doesn't require any installation and you can run it directly from the command line.
@@ -53,21 +53,21 @@ This is the preferred way to give it to the claude agent, as it doesn't require 
 
 ```bash
 # Install globally using npm
-npm install -g gitcp
+npm install -g ghcontext
 
 # OR using pnpm
-pnpm add -g gitcp
+pnpm add -g ghcontext
 
-# Run GitCP with your GitHub token (REQUIRED)
-gitcp --GITHUB_TOKEN your_github_token
+# Run ghcontext with your GitHub token (REQUIRED)
+ghcontext --GITHUB_TOKEN your_github_token
 ```
 
 #### Method 3: Manual Installation (Development)
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/gitcp.git
-cd gitcp
+git clone https://github.com/yourusername/ghcontext.git
+cd ghcontext
 
 # Install dependencies
 pnpm install
@@ -78,7 +78,7 @@ pnpm start --GITHUB_TOKEN your_github_token
 
 ### Usage with LLMs
 
-Connect your MCP-compatible LLM to the GitCP server endpoint:
+Connect your MCP-compatible LLM to the ghcontext server endpoint:
 
 ```
 http://localhost:3000/api/mcp
@@ -104,7 +104,7 @@ Instead of getting outdated or generic information, your assistant can:
 
 ## 🧰 Architecture
 
-GitCP follows a modular design:
+ghcontext follows a modular design:
 
 ```
 ┌─────────────────┐       ┌──────────────┐       ┌────────────────┐
@@ -131,7 +131,7 @@ Traditional AI assistants struggle with:
 - Incomplete understanding of project structure
 - Inability to see recent changes and updates
 
-GitCP solves these problems by giving LLMs a direct line to GitHub's latest information, making your AI assistants more accurate, more helpful, and more in sync with your evolving codebase.
+ghcontext solves these problems by giving LLMs a direct line to GitHub's latest information, making your AI assistants more accurate, more helpful, and more in sync with your evolving codebase.
 
 ## 🛠️ Development
 
@@ -183,5 +183,5 @@ This project is MIT licensed - see the [LICENSE](LICENSE) file for details.
 ---
 
 <p align="center">
-  <i>GitCP: Because your AI assistant should understand your code as well as you do.</i>
+  <i>ghcontext: Because your AI assistant should understand your code as well as you do.</i>
 </p>

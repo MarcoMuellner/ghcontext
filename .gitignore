@@ -137,6 +137,6 @@ dist
 /CLAUDE.md
 /.idea/inspectionProfiles/Project_Default.xml
 /.idea/.gitignore
-/.idea/GitCP.iml
+/.idea/ghcontext.iml
 /.idea/modules.xml
 /.idea/vcs.xml

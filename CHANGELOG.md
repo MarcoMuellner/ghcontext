@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0] - 2025-04-14
 
 ### Added
-- Initial release of GitCP
+- Initial release of ghcontext
 - GitHub Context Provider for LLMs
 - MCP server implementation for GitHub API integration
 - Eight GitHub tools for repository exploration

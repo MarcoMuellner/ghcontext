@@ -1,6 +1,6 @@
-# Release Process for GitCP
+# Release Process for ghcontext
 
-This document outlines the process for creating new releases of GitCP and publishing them to npm.
+This document outlines the process for creating new releases of ghcontext and publishing them to npm.
 
 ## Prerequisites
 
@@ -33,8 +33,8 @@ This document outlines the process for creating new releases of GitCP and publis
 
 4. **Verify the Release**
     - Check that the GitHub Actions workflow completed successfully
-    - Verify the package is available on npm (`npm view gitcp`)
-    - Test installation and execution via npx: `npx gitcp --help`
+    - Verify the package is available on npm (`npm view ghcontext`)
+    - Test installation and execution via npx: `npx ghcontext --help`
 
 ## Version Guidelines
 
