@@ -1,0 +1,32 @@
+# Source code
+src/
+
+# Development and test files
+.github/
+.eslintrc.js
+.prettierrc
+.editorconfig
+.vscode/
+.idea/
+vitest.config.ts
+*.test.ts
+coverage/
+tsconfig.json
+tsconfig.*.json
+
+# Version control
+.git/
+.gitignore
+
+# Temporary files
+node_modules/
+.DS_Store
+*.log
+*.tsbuildinfo
+.env
+.env.*
+
+# Documentation images
+docs/images/
+
+# Note that we don't include dist/ here because we want to publish the compiled code

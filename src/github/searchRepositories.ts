@@ -54,7 +54,7 @@ export interface RepositorySearchResponse {
  * Uses the GitHub GraphQL API to search for repositories based on the provided query.
  * Results are cached to improve performance and reduce API load.
  *
- * @param {string} query - Search query for repositories (GitHub search syntax)
+ * @param {string} searchQuery - Search query for repositories (GitHub search syntax)
  * @param {number} [limit=10] - Maximum number of repositories to return (1-100)
  * @returns {Promise<RepositorySearchResponse>} Repository search results
  * @throws {Error} If the API request fails
@@ -69,14 +69,14 @@ export interface RepositorySearchResponse {
  * });
  */
 export async function searchRepositories(
-  query: string,
-  limit = 10,
+    searchQuery: string,
+    limit = 10,
 ): Promise<RepositorySearchResponse> {
   // Sanitize inputs
   const sanitizedLimit = Math.min(Math.max(1, limit), 100);
 
   // Generate cache key
-  const cacheKey = `repo-search:${query}:${sanitizedLimit}`;
+  const cacheKey = `repo-search:${searchQuery}:${sanitizedLimit}`;
 
   // Check cache first
   const cachedResult = cache.get<RepositorySearchResponse>(cacheKey);
@@ -91,8 +91,8 @@ export async function searchRepositories(
     // Execute query
     const result = await graphqlWithAuth<RepositorySearchResponse>(
       `
-      query searchRepositories($query: String!, $limit: Int!) {
-        search(query: $query, type: REPOSITORY, first: $limit) {
+      query searchRepositories($searchQuery: String!, $limit: Int!) {
+        search(query: $searchQuery, type: REPOSITORY, first: $limit) {
           repositoryCount
           edges {
             node {
@@ -113,7 +113,7 @@ export async function searchRepositories(
       }
     `,
       {
-        query,
+        searchQuery: searchQuery,
         limit: sanitizedLimit,
       },
     );

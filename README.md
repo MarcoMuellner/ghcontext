@@ -32,6 +32,31 @@ GitCP (GitHub Context Provider) bridges the gap between GitHub and Large Languag
 
 ### Installation
 
+#### Method 1: Global Installation from npm
+
+```bash
+# Install globally using npm
+npm install -g gitcp
+
+# OR using pnpm
+pnpm add -g gitcp
+
+# Run GitCP with your GitHub token
+gitcp --GITHUB_TOKEN your_github_token
+```
+
+#### Method 2: Run without Installation using npx
+
+```bash
+# Run directly without installation
+npx gitcp --GITHUB_TOKEN your_github_token
+
+# OR using pnpm
+pnpm dlx gitcp --GITHUB_TOKEN your_github_token
+```
+
+#### Method 3: Manual Installation (Development)
+
 ```bash
 # Clone the repository
 git clone https://github.com/yourusername/gitcp.git
@@ -122,6 +147,33 @@ pnpm run lint
 # Format your code
 pnpm run format
 ```
+
+### 📦 Publishing to npm
+
+If you're a maintainer of this package and need to publish a new version:
+
+1. **Update the version in package.json:**
+   ```bash
+   # For patch releases (bug fixes)
+   npm version patch
+   
+   # For minor releases (new features, no breaking changes)
+   npm version minor
+   
+   # For major releases (breaking changes)
+   npm version major
+   ```
+
+2. **Publish to npm:**
+   ```bash
+   # The prepublishOnly script will run linting, tests, and build automatically
+   npm publish
+   ```
+
+3. **Push tags to GitHub:**
+   ```bash
+   git push --follow-tags
+   ```
 
 ## 📝 License
 
