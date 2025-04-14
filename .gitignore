@@ -134,3 +134,9 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+/CLAUDE.md
+/.idea/inspectionProfiles/Project_Default.xml
+/.idea/.gitignore
+/.idea/GitCP.iml
+/.idea/modules.xml
+/.idea/vcs.xml
