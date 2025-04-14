@@ -132,7 +132,7 @@ describe("Repository Structure", () => {
       });
 
       // Act
-      const result = await getRepositoryStructure("facebook", "react", '.');
+      const result = await getRepositoryStructure("facebook", "react", ".");
 
       // Assert
       expect(cache.get).toHaveBeenCalledWith("structure:facebook/react:.:3");
